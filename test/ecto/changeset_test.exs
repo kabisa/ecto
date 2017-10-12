@@ -540,6 +540,20 @@ defmodule Ecto.ChangesetTest do
     assert changeset.errors == [foo: {"bar", [additional: "information"]}]
   end
 
+  test "add_warning/3" do
+    changeset =
+      changeset(%{})
+      |> add_warning(:foo, "bar")
+    assert changeset.warnings == [foo: {"bar", []}]
+    refute changeset.warningless?
+
+    changeset =
+      changeset(%{})
+      |> add_warning(:foo, "bar", additional: "information")
+    assert changeset.warnings == [foo: {"bar", [additional: "information"]}]
+    refute changeset.warningless?
+  end
+
   test "validate_change/3" do
     # When valid
     changeset =
