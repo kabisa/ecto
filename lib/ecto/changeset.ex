@@ -1273,6 +1273,33 @@ defmodule Ecto.Changeset do
     %{changeset | errors: [{key, {message, keys}}|errors], valid?: false}
   end
 
+  @doc """
+  Adds a warning to the changeset.
+
+  The difference between warning and error is that changeset with errors cannot be persisted but changeset with warnings can. Warning suggest that a specific
+
+  DOCS WORK IN PROGRESS
+
+  An additional keyword list `keys` can be passed to provide additional
+  contextual information for the error. Warnings The
+
+  ## Examples
+
+      iex> changeset = change(%Post{}, %{title: ""})
+      iex> changeset = add_error(changeset, :title, "empty")
+      iex> changeset.errors
+      [title: {"empty", []}]
+      iex> changeset.valid?
+      false
+
+      iex> changeset = change(%Post{}, %{title: ""})
+      iex> changeset = add_error(changeset, :title, "empty", additional: "info")
+      iex> changeset.errors
+      [title: {"empty", [additional: "info"]}]
+      iex> changeset.valid?
+      false
+  """
+
   @spec add_warning(t, atom, String.t, Keyword.t) :: t
   def add_warning(%{warnings: warnings} = changeset, key, message, keys \\ []) when is_binary(message) do
     %{changeset | warnings: [{key, {message, keys}}|warnings], warningless?: false}
