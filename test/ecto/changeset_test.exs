@@ -540,6 +540,20 @@ defmodule Ecto.ChangesetTest do
     assert changeset.errors == [foo: {"bar", [additional: "information"]}]
   end
 
+  test "add_warning/3" do
+    changeset =
+      changeset(%{})
+      |> add_warning(:foo, "bar")
+    assert changeset.warnings == [foo: {"bar", []}]
+    refute changeset.warningless?
+
+    changeset =
+      changeset(%{})
+      |> add_warning(:foo, "bar", additional: "information")
+    assert changeset.warnings == [foo: {"bar", [additional: "information"]}]
+    refute changeset.warningless?
+  end
+
   test "validate_change/3" do
     # When valid
     changeset =
@@ -1193,10 +1207,10 @@ defmodule Ecto.ChangesetTest do
 
   test "inspects relevant data" do
     assert inspect(%Ecto.Changeset{}) ==
-           "#Ecto.Changeset<action: nil, changes: %{}, errors: [], data: nil, valid?: false>"
+           "#Ecto.Changeset<action: nil, changes: %{}, data: nil, errors: [], valid?: false, warnings: [], warningless?: false>"
 
     assert inspect(changeset(%{"title" => "title", "body" => "hi"})) ==
            "#Ecto.Changeset<action: nil, changes: %{body: \"hi\", title: \"title\"}, " <>
-           "errors: [], data: #Ecto.ChangesetTest.Post<>, valid?: true>"
+           "data: #Ecto.ChangesetTest.Post<>, errors: [], valid?: true, warnings: [], warningless?: true>"
   end
 end
